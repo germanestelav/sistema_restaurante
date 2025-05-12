@@ -1,0 +1,22 @@
+erp-backend/
+│
+├── app.py                # Archivo principal de la aplicación FastAPI
+├── models.py             # Modelos de la base de datos comunes
+├── schemas.py            # Esquemas comunes (Pydantic)
+├── crud.py               # Funciones CRUD generales
+├── database/             # Configuración de la base de datos
+│   └── session.py        # Conexión con la base de datos
+│
+├── modules/              # Directorio para los módulos
+│   ├── productos/        # Módulo de productos
+│   │   ├── __init__.py
+│   │   ├── models.py     # Modelos específicos del módulo
+│   │   ├── schemas.py    # Esquemas específicos del módulo
+│   │   ├── crud.py       # Funciones CRUD específicas del módulo
+│   │   └── routes.py     # Rutas específicas del módulo
+│   │
+│   ├── ventas/           # Módulo de ventas
+│   └── compras/          # Módulo de compras
+│   └── empleados/        # Módulo de empleados
+│
+└── requirements.txt      # Dependencias del proyecto
