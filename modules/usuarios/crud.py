@@ -1,28 +1,41 @@
-# usuarios/crud.py
+# modules/usuarios/crud.py
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
-from models import Usuario as UsuarioModel
-from schemas import UsuarioCreate
-from passlib.context import CryptContext  # Para el cifrado de contraseñas
+from passlib.context import CryptContext
+from . import models, schemas  # Asegúrate de importar schemas aquí
+from .models import Usuario
+from .schemas import UsuarioCreate  # Importamos el esquema UsuarioCreate desde schemas.py
 
-# Inicialización del contexto de cifrado de contraseñas
+# Configuramos el contexto para cifrar contraseñas
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# Función para crear un nuevo usuario
-def create_usuario(db: Session, usuario: UsuarioCreate):
-    db_usuario = db.query(UsuarioModel).filter(UsuarioModel.email == usuario.email).first()
-    if db_usuario:
-        return None  # Si el usuario ya existe, retornamos None
+# Función para cifrar la contraseña
+def hash_password(password: str) -> str:
+    return pwd_context.hash(password)
+
+# Función para verificar la contraseña
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return pwd_context.verify(plain_password, hashed_password)
+
+def create_usuario(db: Session, usuario: schemas.UsuarioCreate):
+    # Verificar si el correo ya existe
+    existing_user_by_email = db.query(models.Usuario).filter(models.Usuario.correo == usuario.correo).first()
+    if existing_user_by_email:
+        raise HTTPException(status_code=400, detail="El correo electrónico ya está registrado.")
     
-    # Ciframos la contraseña antes de almacenarla
-    hashed_password = pwd_context.hash(usuario.contrasena)
+    # Verificar si el número de identificación ya existe
+    existing_user_by_id = db.query(models.Usuario).filter(models.Usuario.numero_identificacion == usuario.numero_identificacion).first()
+    if existing_user_by_id:
+        raise HTTPException(status_code=400, detail="El número de identificación ya está registrado.")
     
-    db_usuario = UsuarioModel(
+    # Si no existe, crear un nuevo usuario
+    db_usuario = models.Usuario(
         nombre=usuario.nombre,
         apellido=usuario.apellido,
-        email=usuario.email,
-        contrasena=hashed_password,  # Guardamos la contraseña cifrada
-        id_rol=usuario.id_rol,
-        estado=usuario.estado
+        correo=usuario.correo,
+        contrasena=hash_password(usuario.contrasena),
+        estado=usuario.estado,
+        numero_identificacion=usuario.numero_identificacion
     )
     
     db.add(db_usuario)
@@ -30,36 +43,32 @@ def create_usuario(db: Session, usuario: UsuarioCreate):
     db.refresh(db_usuario)
     return db_usuario
 
-# Función para obtener un usuario por su ID
-def get_usuario(db: Session, id_usuario: int):
-    return db.query(UsuarioModel).filter(UsuarioModel.id_usuario == id_usuario).first()
+# Obtener todos los usuarios
+def get_usuarios(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(Usuario).offset(skip).limit(limit).all()
 
-# Función para actualizar un usuario
-def update_usuario(db: Session, id_usuario: int, usuario: UsuarioCreate):
-    db_usuario = db.query(UsuarioModel).filter(UsuarioModel.id_usuario == id_usuario).first()
-    
+# Obtener un usuario por su ID
+def get_usuario(db: Session, usuario_id: int):
+    return db.query(Usuario).filter(Usuario.id_usuario == usuario_id).first()
+
+# Actualizar un usuario con contraseña cifrada
+def update_usuario(db: Session, usuario_id: int, usuario: UsuarioCreate):
+    db_usuario = db.query(Usuario).filter(Usuario.id_usuario == usuario_id).first()
     if db_usuario:
-        # Actualizamos los campos del usuario
         db_usuario.nombre = usuario.nombre
         db_usuario.apellido = usuario.apellido
-        db_usuario.email = usuario.email
-        db_usuario.contrasena = pwd_context.hash(usuario.contrasena)  # Cifrar la nueva contraseña
-        db_usuario.id_rol = usuario.id_rol
+        db_usuario.correo = usuario.correo
+        db_usuario.contrasena = hash_password(usuario.contrasena)  # Ciframos la nueva contraseña
         db_usuario.estado = usuario.estado
-        
+        db_usuario.numero_identificacion = usuario.numero_identificacion
         db.commit()
         db.refresh(db_usuario)
-        return db_usuario
-    
-    return None  # Si no se encuentra el usuario, retornamos None
+    return db_usuario
 
-# Función para eliminar un usuario
-def delete_usuario(db: Session, id_usuario: int):
-    db_usuario = db.query(UsuarioModel).filter(UsuarioModel.id_usuario == id_usuario).first()
-    
+# Eliminar un usuario
+def delete_usuario(db: Session, usuario_id: int):
+    db_usuario = db.query(Usuario).filter(Usuario.id_usuario == usuario_id).first()
     if db_usuario:
         db.delete(db_usuario)
         db.commit()
-        return db_usuario
-    
-    return None  # Si el usuario no existe, retornamos None
+    return db_usuario

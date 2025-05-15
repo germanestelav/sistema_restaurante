@@ -1,14 +1,17 @@
-# usuarios/models.py
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Text
 from database.session import Base
+from sqlalchemy.orm import relationship
 
 class Usuario(Base):
-    __tablename__ = "usuario"
+    __tablename__ = 'usuarios'
 
-    id_usuario = Column(Integer, primary_key=True, index=True)
-    nombre = Column(String(100))
-    apellido = Column(String(100))
-    email = Column(String(100), unique=True, index=True)
-    contrasena = Column(String(255))
-    id_rol = Column(Integer)  # En este caso, es un Integer que puede ser referenciado desde la tabla 'rol'
-    estado = Column(String(20), default="activo")  # El estado puede ser 'activo' o 'inactivo'
+    id_usuario = Column(Integer, primary_key=True, autoincrement=True)
+    nombre = Column(String(100), nullable=False)
+    apellido = Column(String(100), nullable=False)
+    correo = Column(String(100), nullable=False, unique=True)
+    contrasena = Column(Text, nullable=False)  # Contraseña cifrada
+    estado = Column(String(20), default='activo')
+    numero_identificacion = Column(String(50), unique=True, nullable=False)
+
+# Relación con Pedido
+    pedidos = relationship("Pedido", back_populates="usuario")  # Relación con Pedido
