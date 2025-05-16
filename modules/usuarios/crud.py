@@ -72,3 +72,8 @@ def delete_usuario(db: Session, usuario_id: int):
         db.delete(db_usuario)
         db.commit()
     return db_usuario
+
+
+
+def get_usuario_por_username(db: Session, username: str):
+    return db.query(Usuario).filter(Usuario.correo == username).first()
