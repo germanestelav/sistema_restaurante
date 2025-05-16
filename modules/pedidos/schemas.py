@@ -1,23 +1,29 @@
 from pydantic import BaseModel
 from typing import List, Optional
+from datetime import datetime
 
-# Esquema para Producto en detalle del pedido
 class DetallePedido(BaseModel):
+    id_detalle: int
     id_producto: int
     cantidad: int
     precio_unitario: float
 
-# Esquema para la creación de un pedido
+    class Config:
+        orm_mode = True
+
 class PedidoCreate(BaseModel):
     id_usuario: int
     id_mesa: int
     estado: Optional[str] = 'pendiente'
-    detalles: List[DetallePedido]  # Relación con los productos que tiene el pedido
+    detalles: List[DetallePedido]
 
-# Esquema para devolver los detalles de un pedido
-class Pedido(PedidoCreate):
+class Pedido(BaseModel):
     id_pedido: int
-    fecha: str  # Fecha de creación del pedido
+    id_usuario: int
+    id_mesa: int
+    estado: Optional[str]
+    fecha: datetime
+    detalles: List[DetallePedido]
 
     class Config:
-        orm_mode = True  # Permite convertir el modelo SQLAlchemy a un diccionario
+        orm_mode = True

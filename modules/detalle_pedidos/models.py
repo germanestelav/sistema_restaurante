@@ -1,8 +1,7 @@
+# modules/detalle_pedidos/models.py
 from sqlalchemy import Column, Integer, ForeignKey, DECIMAL
 from sqlalchemy.orm import relationship
 from database.session import Base
-
-
 
 class DetallePedido(Base):
     __tablename__ = 'detalle_pedidos'
@@ -16,3 +15,4 @@ class DetallePedido(Base):
     # Relaciones
     pedido = relationship("Pedido", back_populates="detalles")
     producto = relationship("Producto")  # Relación hacia Producto
+    historiales = relationship("HistorialDetallePedido", back_populates="detalle_pedido")  # Corregir aquí

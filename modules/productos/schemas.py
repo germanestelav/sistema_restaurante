@@ -1,18 +1,21 @@
 # productos/schemas.py
 from pydantic import BaseModel
+from decimal import Decimal
+from typing import Optional
 
 class ProductoBase(BaseModel):
     nombre: str
-    descripcion: str = None
-    precio: float
-    categoria: str = None
-    stock: int = 0
+    descripcion: Optional[str] = None
+    precio: Decimal
+    stock: int
+    estado: Optional[str] = "activo"
+    id_categoria: int
 
 class ProductoCreate(ProductoBase):
-    pass  # Para la creación de productos
+    pass
 
 class Producto(ProductoBase):
     id_producto: int
 
     class Config:
-        orm_mode = True  # Permite convertir el modelo SQLAlchemy a diccionario
+        orm_mode = True

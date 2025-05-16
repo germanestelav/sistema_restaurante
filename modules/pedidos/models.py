@@ -3,7 +3,8 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 from database.session import Base
 from modules.usuarios.models import Usuario
-
+from modules.pagos.models import Pago
+from modules.detalle_pedidos.models import DetallePedido
 
 class Pedido(Base):
     __tablename__ = 'pedidos'
@@ -15,6 +16,7 @@ class Pedido(Base):
     fecha = Column(TIMESTAMP, default=datetime.utcnow)  # Fecha del pedido
 
     # Relaciones a nivel de Pedido
-    usuario = relationship("Usuario")  # Relación con Usuario
-    mesa = relationship("Mesa")  # Relación con Mesa
-    detalles = relationship("DetallePedido", back_populates="pedido")  # Detalles de los productos del pedido
+    usuario = relationship("Usuario")
+    mesa = relationship("Mesa")
+    detalles = relationship("DetallePedido", back_populates="pedido")
+    pagos = relationship("Pago", back_populates="pedido")

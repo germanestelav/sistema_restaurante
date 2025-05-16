@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text
 from database.session import Base
 from sqlalchemy.orm import relationship
+from modules.roles.models import Rol
 
 class Usuario(Base):
     __tablename__ = 'usuarios'
@@ -15,3 +16,4 @@ class Usuario(Base):
 
 # Relación con Pedido
     pedidos = relationship("Pedido", back_populates="usuario")  # Relación con Pedido
+    roles_asignados = relationship("UsuarioRol", back_populates="usuario", cascade="all, delete-orphan")
