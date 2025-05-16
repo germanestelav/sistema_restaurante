@@ -1,16 +1,19 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from . import models, schemas
+from modules.pedidos.models import Pedido
+from modules.productos.models import Producto
 
 # Crear un detalle de pedido
+
 def create_detalle_pedido(db: Session, detalle: schemas.DetallePedidoCreate, id_pedido: int):
     # Verificar si el pedido existe
-    db_pedido = db.query(models.Pedido).filter(models.Pedido.id_pedido == id_pedido).first()
+    db_pedido = db.query(Pedido).filter(Pedido.id_pedido == id_pedido).first()
     if not db_pedido:
         raise HTTPException(status_code=404, detail="Pedido no encontrado")
 
     # Verificar si el producto existe
-    db_producto = db.query(models.Producto).filter(models.Producto.id_producto == detalle.id_producto).first()
+    db_producto = db.query(Producto).filter(Producto.id_producto == detalle.id_producto).first()
     if not db_producto:
         raise HTTPException(status_code=404, detail="Producto no encontrado")
 
