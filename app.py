@@ -24,6 +24,7 @@ from modules.usuarios_roles.routes import router as usuario_rol_router
 from modules.historial_detalle_pedido.routes import router as historial_detalle_pedido_router
 from modules.auth.routes import router as auth_router
 from modules.password_reset.routes import router as password_reset_router
+from modules.reportes.routes import router as reportes_router
 
 
 app = FastAPI()
@@ -40,3 +41,4 @@ app.include_router(roles_router, prefix="/roles", tags=["roles"])
 app.include_router(categorias_router, prefix="/categorias", tags=["categorias"])
 app.include_router(usuario_rol_router, prefix="/usuario_rol", tags=["usuario_rol"])
 app.include_router(historial_detalle_pedido_router, prefix="/historial_detalle_pedido", tags=["historial_detalle_pedido"])
+app.include_router(reportes_router, prefix="/reportes", tags=["reportes"])

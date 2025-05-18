@@ -1,0 +1,2 @@
+cambiar el estado de pedidos desde la cocina lo podemos hacer a travez de la tabla pedidos, 
+la cual tiene una columna llamanda estado (entregado, cancelado, etc.)
