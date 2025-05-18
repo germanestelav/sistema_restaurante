@@ -1,0 +1,8 @@
+Pedido ID,Mesa,Estado Pedido,Fecha Pedido,Producto,Cantidad,Precio Unitario,Pagado,Monto Pagado,Metodo Pago,Fecha Pago
+4,5,entregado,2025-05-14T15:00:00,Ensalada César,1,8.0,SI,20.0,transferencia,2025-05-14T15:30:00
+6,1,pendiente,2025-05-15T02:07:56.327186,Tarta de Manzana,4,15.0,NO,,,
+7,1,pendiente,2025-05-15T02:08:13.796905,Tarta de Manzana,3,8.0,NO,,,
+2,3,entregado,2025-05-14T13:30:00,Spaghetti Bolognese,1,15.0,SI,35.0,efectivo,2025-05-14T14:00:00
+2,3,entregado,2025-05-14T13:30:00,Bistec a la Parrilla,1,20.0,NO,,,
+3,1,entregado,2025-05-14T14:00:00,Sopa de Pollo,3,8.0,SI,24.0,tarjeta,2025-05-14T14:30:00
+9,2,pendiente,2025-05-16T06:10:12.320060,Tarta de Manzana,2,15.5,NO,,,
