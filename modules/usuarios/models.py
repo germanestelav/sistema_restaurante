@@ -17,3 +17,7 @@ class Usuario(Base):
 # Relación con Pedido
     pedidos = relationship("Pedido", back_populates="usuario")  # Relación con Pedido
     roles_asignados = relationship("UsuarioRol", back_populates="usuario", cascade="all, delete-orphan")
+
+    @property
+    def roles(self):
+        return [usuario_rol.rol.nombre for usuario_rol in self.roles_asignados]
