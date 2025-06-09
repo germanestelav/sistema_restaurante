@@ -13,3 +13,6 @@ class Mesa(Base):
 
 # Relación con Pedido
     pedidos = relationship("Pedido", back_populates="mesa")  # Relación con Pedido
+
+    def __repr__(self):
+            return f"<Mesa id={self.id_mesa} numero={self.numero} capacidad={self.capacidad} estado='{self.estado}'>"

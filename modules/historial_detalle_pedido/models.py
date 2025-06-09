@@ -17,3 +17,6 @@ class HistorialDetallePedido(Base):
 
     detalle_pedido = relationship("DetallePedido", back_populates="historiales")
     producto_anterior = relationship("Producto")
+
+    def __repr__(self):
+        return f"<HistorialDetallePedido id={self.id_historial} detalle={self.detalle_pedido}>"

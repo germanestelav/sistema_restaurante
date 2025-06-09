@@ -6,7 +6,10 @@ from database.session import get_db
 from modules.permisos.dependencias import permiso_requerido
 from modules.consultas.detalles_pedidos_por_mozo import obtener_detalles_pedidos_por_mozo
 from modules.reportes.schemas import DetallesPedidosPorMozo
+from utils.logger import get_logger
 
+
+logger = get_logger("modules.reportes.router")
 
 router = APIRouter()
 
@@ -19,6 +22,7 @@ def ventas_por_mozo(db: Session = Depends(get_db)):
     """
     Devuelve la cantidad de ventas realizadas por cada mozo.
     """
+    logger.info("Endpoint /ventas-por-mozo accedido")
     return obtener_ventas_por_mozo(db)
 
 @router.get(
@@ -36,4 +40,8 @@ def detalles_pedidos_por_mozo(
     limit_pedido: int = 10,
     estado: str = None
 ):
-    return obtener_detalles_pedidos_por_mozo(db, mozo_id, fecha_inicio, fecha_fin, limit, offset, limit_pedido)
+    logger.info("Endpoint /detalles-pedidos-por-mozo accedido con parámetros: "
+                f"mozo_id={mozo_id}, fecha_inicio={fecha_inicio}, fecha_fin={fecha_fin}, "
+                f"limit={limit}, offset={offset}, limit_pedido={limit_pedido}, estado={estado}")
+    
+    return obtener_detalles_pedidos_por_mozo(db, mozo_id, fecha_inicio, fecha_fin, limit, offset, limit_pedido, estado)

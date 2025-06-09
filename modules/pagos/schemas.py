@@ -2,16 +2,16 @@ from pydantic import BaseModel
 from datetime import datetime
 from decimal import Decimal
 
-class PagoBase(BaseModel):
+class PagoCreate(BaseModel):
     id_pedido: int
-    monto_total: Decimal
-    metodo_pago: str
+    id_metodo_pago: int
+    # monto_total eliminado
 
-class PagoCreate(PagoBase):
-    pass
-
-class Pago(PagoBase):
+class Pago(BaseModel):
     id_pago: int
+    id_pedido: int
+    id_metodo_pago: int
+    monto_total: Decimal
     fecha_pago: datetime
 
     class Config:

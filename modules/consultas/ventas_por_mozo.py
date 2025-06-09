@@ -3,6 +3,10 @@ from sqlalchemy import func, case
 from modules.usuarios.models import Usuario
 from modules.pedidos.models import Pedido
 from modules.pagos.models import Pago
+from datetime import datetime
+from utils.logger import get_logger
+
+logger = get_logger("modules.consultas.ventas_por_mozo")
 
 def obtener_ventas_por_mozo(
     db: Session,
@@ -11,6 +15,7 @@ def obtener_ventas_por_mozo(
     fecha_fin: str = None,
     estado: str = None
 ):
+    logger.info("Iniciando consulta de ventas por mozo")
     query = db.query(
         Usuario.nombre.label("mozo"),
         func.count(Pedido.id_pedido).label("total_ventas"),
@@ -28,19 +33,22 @@ def obtener_ventas_por_mozo(
     ).join(Pago, Pago.id_pedido == Pedido.id_pedido)
 
     if mozo_id:
+        logger.info(f"Filtrando por mozo_id: {mozo_id}")
         query = query.filter(Usuario.id_usuario == mozo_id)
     if fecha_inicio:
-        from datetime import datetime
+        logger.info(f"Aplicando filtro desde fecha_inicio: {fecha_inicio}")
         fecha_inicio = datetime.fromisoformat(fecha_inicio)
         query = query.filter(Pedido.fecha >= fecha_inicio)
     if fecha_fin:
-        from datetime import datetime
+        logger.info(f"Aplicando filtro hasta fecha_fin: {fecha_fin}")
         fecha_fin = datetime.fromisoformat(fecha_fin)
         query = query.filter(Pedido.fecha <= fecha_fin)
     if estado:
+        logger.info(f"Filtrando por estado del pedido: {estado}")
         query = query.filter(Pedido.estado == estado)
 
     resultados = query.group_by(Usuario.id_usuario).all()
+    logger.info(f"Se encontraron {len(resultados)} resultados de ventas por mozo")
 
     return [
         {

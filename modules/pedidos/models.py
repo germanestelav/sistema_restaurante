@@ -12,7 +12,7 @@ class Pedido(Base):
     id_pedido = Column(Integer, primary_key=True, autoincrement=True)
     id_usuario = Column(Integer, ForeignKey('usuarios.id_usuario'), nullable=False)  # Relación con Usuario
     id_mesa = Column(Integer, ForeignKey('mesas.id_mesa'), nullable=False)  # Relación con Mesa
-    estado = Column(String(20), default="pendiente")  # Estado del pedido (pendiente, en_proceso, entregado, cancelado)
+    id_estado_pedido = Column(Integer, ForeignKey("estados_pedidos.id_estado_pedido"))  # Relación con EstadoPedido
     fecha = Column(TIMESTAMP, default=datetime.utcnow)  # Fecha del pedido
 
     # Relaciones a nivel de Pedido
@@ -20,3 +20,4 @@ class Pedido(Base):
     mesa = relationship("Mesa")
     detalles = relationship("DetallePedido", back_populates="pedido")
     pagos = relationship("Pago", back_populates="pedido")
+    estado = relationship("EstadoPedido", back_populates="pedidos")

@@ -9,3 +9,6 @@ class Categoria(Base):
     nombre = Column(String(100), nullable=False, unique=True)
 
     productos = relationship("Producto", back_populates="categoria_rel")
+
+    def __repr__(self):
+        return f"<Categoria id={self.id_categoria} nombre={self.nombre}>"

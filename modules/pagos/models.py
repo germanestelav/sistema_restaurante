@@ -10,6 +10,9 @@ class Pago(Base):
     id_pedido = Column(Integer, ForeignKey("pedidos.id_pedido"), nullable=False)
     monto_total = Column(Numeric, nullable=False)
     fecha_pago = Column(TIMESTAMP, default=datetime.utcnow, nullable=False)
-    metodo_pago = Column(String(50), nullable=False)
+    id_metodo_pago = Column(Integer, ForeignKey("metodos_pagos.id_metodo_pago"))
+    
+
 
     pedido = relationship("Pedido")
+    metodo_pago = relationship("MetodoPago")
